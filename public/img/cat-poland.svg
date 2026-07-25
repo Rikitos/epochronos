@@ -1,0 +1,15 @@
+<svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+  <!-- Polish flag: white over red horizontal stripes on dark crimson background -->
+  <rect width="36" height="36" fill="#180008"/>
+  <defs>
+    <clipPath id="pc">
+      <rect x="3" y="6" width="30" height="24" rx="2"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#pc)">
+    <!-- Top half: white -->
+    <rect x="3" y="6"  width="30" height="12" fill="#FFFFFF"/>
+    <!-- Bottom half: Polish red -->
+    <rect x="3" y="18" width="30" height="12" fill="#DC143C"/>
+  </g>
+</svg>

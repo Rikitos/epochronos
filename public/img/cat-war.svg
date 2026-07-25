@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 250">
+  <rect width="400" height="250" fill="#160606"/>
+  <!-- blood-red glow behind shield -->
+  <ellipse cx="200" cy="125" rx="80" ry="85" fill="#8a1010" opacity="0.14"/>
+  <!-- left sword (diagonal, behind shield) -->
+  <g transform="rotate(-40 200 125)">
+    <!-- blade -->
+    <rect x="193" y="30" width="14" height="130" rx="3" fill="#3a3a3a"/>
+    <!-- fuller groove -->
+    <rect x="199" y="30" width="2" height="120" fill="#252525"/>
+    <!-- crossguard -->
+    <rect x="170" y="155" width="60" height="10" rx="4" fill="#5a4010"/>
+    <!-- grip -->
+    <rect x="195" y="163" width="10" height="30" rx="3" fill="#4a2808"/>
+    <!-- pommel -->
+    <ellipse cx="200" cy="196" rx="10" ry="8" fill="#3a3a3a"/>
+    <!-- blade tip highlight -->
+    <polygon points="193,30 207,30 200,14" fill="#5a5a5a"/>
+  </g>
+  <!-- right sword (diagonal, behind shield) -->
+  <g transform="rotate(40 200 125)">
+    <!-- blade -->
+    <rect x="193" y="30" width="14" height="130" rx="3" fill="#3a3a3a"/>
+    <rect x="199" y="30" width="2" height="120" fill="#252525"/>
+    <!-- crossguard -->
+    <rect x="170" y="155" width="60" height="10" rx="4" fill="#5a4010"/>
+    <!-- grip -->
+    <rect x="195" y="163" width="10" height="30" rx="3" fill="#4a2808"/>
+    <!-- pommel -->
+    <ellipse cx="200" cy="196" rx="10" ry="8" fill="#3a3a3a"/>
+    <polygon points="193,30 207,30 200,14" fill="#5a5a5a"/>
+  </g>
+  <!-- central kite shield (in front of swords) -->
+  <path d="M162,68 L238,68 L238,162 Q238,195 200,218 Q162,195 162,162 Z" fill="#2a0808"/>
+  <!-- shield highlight / depth -->
+  <path d="M169,75 L231,75 L231,160 Q231,190 200,211 Q169,190 169,160 Z" fill="#361010"/>
+  <!-- cross on shield -->
+  <rect x="196" y="75" width="8" height="136" fill="#1a0404"/>
+  <rect x="169" y="128" width="62" height="8" fill="#1a0404"/>
+  <!-- shield boss (center rivet) -->
+  <circle cx="200" cy="132" r="10" fill="#3a3a3a"/>
+  <circle cx="200" cy="132" r="6" fill="#555"/>
+  <!-- shield border -->
+  <path d="M162,68 L238,68 L238,162 Q238,195 200,218 Q162,195 162,162 Z"
+        fill="none" stroke="#8a1010" stroke-width="3"/>
+</svg>

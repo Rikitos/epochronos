@@ -1,0 +1,18 @@
+<svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+  <!-- French tricolor flag centered on dark navy background -->
+  <rect width="36" height="36" fill="#06061a"/>
+  <defs>
+    <clipPath id="fc">
+      <!-- Flag has a 2:3 height:width ratio; 24x16 centered leaves a 6px margin top/bottom -->
+      <rect x="3" y="6" width="30" height="24" rx="2"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#fc)">
+    <!-- Blue stripe (left third) -->
+    <rect x="3"  y="6" width="10" height="24" fill="#002495"/>
+    <!-- White stripe (middle third) -->
+    <rect x="13" y="6" width="10" height="24" fill="#EEEEEE"/>
+    <!-- Red stripe (right third) -->
+    <rect x="23" y="6" width="10" height="24" fill="#ED2939"/>
+  </g>
+</svg>

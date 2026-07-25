@@ -1,0 +1,897 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   App shell
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.app {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Header ──────────────────────────────────────────────────────────────── */
+.app-header {
+  max-width: 960px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 28px 20px 16px;
+  text-align: center;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.app-title {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: var(--accent);
+}
+
+.header-score {
+  display: block;
+  font-size: 0.82rem;
+  color: var(--accent);
+  margin-top: 4px;
+}
+
+/* Shared pill style for both header icon buttons */
+.header-icon-btn {
+  position: absolute;
+  top: 28px;
+  left: 20px;
+  background: var(--accent-dim);
+  color: var(--accent);
+  padding: 5px 11px;
+  border-radius: 20px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: background 0.15s, color 0.15s;
+}
+
+/* Settings gear on the right side */
+.header-icon-btn--right {
+  left: auto;
+  right: 20px;
+}
+
+.header-icon-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+/* ── Main ────────────────────────────────────────────────────────────────── */
+.app-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0 40px;
+}
+
+/* ── Game board / result screen: vertically centred in the available space ── */
+.game-board,
+.result-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Card list — default: vertical column (mobile portrait)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 16px;
+  box-sizing: border-box;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Event card — default: horizontal bar (vertical list mode)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.event-card {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: grab;
+  user-select: none;
+  min-height: 64px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.event-card:hover          { border-color: var(--accent); }
+.event-card.dragging       { box-shadow: var(--shadow); border-color: var(--accent); cursor: grabbing; }
+.event-card.correct        { border-color: var(--correct);   cursor: default; }
+.event-card.incorrect      { border-color: var(--incorrect); cursor: default; }
+.event-card.correct  { background: var(--correct-bg); }
+.event-card.incorrect { background: var(--incorrect-bg); }
+
+/* ── Drag handle — mobile playing phase only ─────────────────────────────── */
+/* Narrow left strip that owns the dnd-kit listeners and touch-action:none.
+   The rest of the card is touch-action:auto so page scroll still works. */
+.card-grip {
+  width: 40px;
+  align-self: stretch;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  touch-action: none;
+  cursor: grab;
+  color: rgba(255, 255, 255, 0.45);
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.card-grip:active { cursor: grabbing; }
+
+.card-grip-num {
+  font-size: 0.62rem;
+  font-weight: 700;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* ── Card image — vertical mode: wide gradient strip on left ─────────────── */
+/* Covers roughly the left quarter of the card so category colour is visible */
+.card-image {
+  width: 80px;
+  align-self: stretch;
+  flex-shrink: 0;
+}
+
+/* ── Position badge — overlaid on the gradient in all modes ──────────────── */
+.card-position {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.38);
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Card content (title + year) ─────────────────────────────────────────── */
+.card-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  padding: 10px 8px;
+  gap: 8px;
+}
+
+.card-title {
+  flex: 1;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-strong);
+  line-height: 1.3;
+}
+
+.card-year {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--accent);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── Info button — vertical mode: in flow ────────────────────────────────── */
+.card-info-btn {
+  flex-shrink: 0;
+  background: none;
+  color: var(--border);
+  padding: 6px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: color 0.15s;
+}
+
+.card-info-btn:hover { color: var(--accent); }
+
+/* ── Arrow controls — vertical mode: column on right ────────────────────── */
+.card-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 8px 6px 6px;
+  border-left: 1px solid var(--border);
+  align-self: stretch;
+  justify-content: center;
+  background: var(--bg-card); /* opaque so it stands out from the gradient card background */
+}
+
+.card-controls button {
+  background: var(--border);
+  color: var(--text);
+  border-radius: 4px;
+  width: 26px;
+  height: 22px;
+  font-size: 0.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, color 0.15s;
+}
+
+.card-controls button:hover:not(:disabled) {
+  background: var(--accent-dim);
+  color: var(--accent);
+}
+
+.card-controls button:disabled { opacity: 0.2; cursor: default; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Countdown timer
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.timer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 960px;
+  padding: 0 20px 10px;
+  box-sizing: border-box;
+}
+
+.timer-bar {
+  flex: 1;
+  height: 5px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.timer-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 1s linear, background 0.4s;
+}
+
+.timer-text {
+  font-size: 0.82rem;
+  font-weight: 700;
+  min-width: 30px;
+  text-align: right;
+  transition: color 0.4s;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Submit / Next round button
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.btn-submit {
+  width: 240px;
+  margin-top: 16px;
+  padding: 13px;
+  background: var(--accent);
+  color: #0f0e13;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  border-radius: 10px;
+  transition: opacity 0.15s, transform 0.1s;
+}
+
+.btn-submit:hover  { opacity: 0.9; }
+.btn-submit:active { transform: scale(0.98); }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Result header
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.result-header {
+  text-align: center;
+  padding: 4px 16px 12px;
+}
+
+.result-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-strong);
+}
+
+.result-score {
+  font-size: 0.85rem;
+  color: var(--text);
+  margin-top: 4px;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Horizontal layout — 640px and wider
+   Cards become portrait tiles arranged in a scrollable row.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@media (min-width: 640px) {
+  .card-list {
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 28px 24px 36px; /* generous top/bottom padding = more touch area outside cards for drag-scrolling */
+    gap: 10px;
+    /* Subtle scrollbar */
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  .card-list::-webkit-scrollbar        { height: 4px; }
+  .card-list::-webkit-scrollbar-track  { background: transparent; }
+  .card-list::-webkit-scrollbar-thumb  { background: var(--border); border-radius: 2px; }
+
+  /* Portrait tile */
+  .event-card {
+    flex: 0 0 148px;
+    flex-direction: column;
+    align-items: stretch;
+    min-height: unset;
+    touch-action: none; /* whole card is the drag surface at 640px+; grip handle handles mobile */
+  }
+
+  /* Full-width image area */
+  .card-image {
+    width: 100%;
+    height: 110px;
+    align-self: auto;
+    flex-shrink: 0;
+  }
+
+  /* Position badge: re-anchor to top-left corner of the image area */
+  .card-position {
+    top: 8px;
+    left: 8px;
+    transform: none; /* override the vertical-centre translateY from mobile */
+    background: rgba(0, 0, 0, 0.45);
+  }
+
+  /* Content: column layout, title then year */
+  .card-content {
+    flex-direction: column;
+    padding: 9px 10px 6px;
+    gap: 3px;
+    align-items: flex-start;
+  }
+
+  .card-title {
+    font-size: 0.8rem;
+    /* Clamp to 3 lines so all cards stay the same height */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-year { font-size: 0.72rem; }
+
+  /* Info button: absolute overlay on image */
+  .card-info-btn {
+    position: absolute;
+    top: 7px;
+    right: 7px;
+    background: rgba(0, 0, 0, 0.4);
+    color: rgba(255, 255, 255, 0.7);
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    z-index: 1;
+  }
+
+  .card-info-btn:hover {
+    background: rgba(0, 0, 0, 0.65);
+    color: #fff;
+  }
+
+  /* Controls: horizontal row at the bottom */
+  .card-controls {
+    flex-direction: row;
+    gap: 4px;
+    padding: 5px 8px 7px;
+    border-left: none;
+    border-top: 1px solid var(--border);
+    align-self: auto;
+    justify-content: space-between;
+  }
+
+  .card-controls button {
+    flex: 1;
+    width: auto;
+    height: 24px;
+    font-size: 0.58rem;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Large-screen grid — 1100px and wider
+   Default: single row (grid-auto-flow: column, cards fill left to right).
+   card-list--two-row: 2 explicit rows, cards fill column-by-column, so the
+   left-to-right reading order spans both rows naturally.
+   Only applied when cards.length ≥ 7 (set via JS class in GameBoard).
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@media (min-width: 1100px) {
+  .card-list {
+    display: grid;
+    grid-auto-flow: column;      /* fill columns left-to-right */
+    grid-auto-columns: 170px;    /* bigger cards on large screens */
+    grid-auto-rows: auto;
+    overflow-x: auto;
+    justify-content: center;
+    gap: 12px;
+    padding: 16px 32px 20px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  /* 2-row variant: row-major order (1,2,3,4 / 5,6,7,8) with extra vertical gap.
+     grid-template-columns is set via inline style in GameBoard/ResultScreen
+     using repeat(ceil(count/2), 170px) so items flow left-to-right across rows. */
+  .card-list--two-row {
+    grid-template-rows: repeat(2, auto);
+    grid-auto-flow: row;   /* override the default column flow; fills rows left-to-right */
+    gap: 24px 12px;        /* row-gap: 24px for visual breathing room between the two rows */
+  }
+
+  /* Cards are sized by grid-auto-columns, not by flex */
+  .event-card { flex: none; }
+
+  /* Taller image area on bigger cards */
+  .card-image { height: 120px; }
+
+  .card-title { -webkit-line-clamp: 3; }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Bottom sheet
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s;
+}
+
+.sheet-backdrop.open { opacity: 1; pointer-events: auto; }
+
+.bottom-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 101;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-bottom: none;
+  border-radius: 16px 16px 0 0;
+  padding: 12px 20px 40px;
+  /* Prevent overflow when content (e.g. settings filter chips) exceeds viewport height */
+  max-height: 85vh;
+  overflow-y: auto;
+  /* Stop the page itself from scrolling while the sheet is being scrolled */
+  overscroll-behavior: contain;
+  transform: translateY(100%);
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bottom-sheet.open { transform: translateY(0); }
+
+.sheet-pill {
+  width: 36px;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  margin: 0 auto 16px;
+}
+
+.sheet-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: var(--border);
+  color: var(--text);
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  font-size: 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, color 0.15s;
+}
+
+.sheet-close:hover { background: var(--accent-dim); color: var(--accent); }
+
+/* Generic sheet body text */
+.sheet-body h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-strong);
+  margin-bottom: 12px;
+}
+
+.sheet-body p {
+  color: var(--text);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+.sheet-body ul {
+  padding-left: 18px;
+  color: var(--text);
+  font-size: 0.9rem;
+  line-height: 1.9;
+}
+
+/* Event image shown in the info bottom sheet — contain so tall SVGs aren't cropped */
+.sheet-event-image {
+  width: 100%;
+  height: 180px;
+  border-radius: 8px;
+  margin-bottom: 14px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.sheet-event-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-strong);
+  margin-bottom: 4px;
+}
+
+.sheet-event-year {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+
+.sheet-placeholder {
+  font-style: italic;
+  color: var(--border);
+  font-size: 0.8rem;
+  margin-top: 10px;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Settings sheet rows
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.setting-row:last-child { border-bottom: none; }
+
+.setting-label {
+  font-size: 0.9rem;
+  color: var(--text-strong);
+}
+
+.setting-toggle {
+  background: var(--accent-dim);
+  color: var(--accent);
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  transition: background 0.15s, color 0.15s;
+}
+
+.setting-toggle:hover { background: var(--accent); color: var(--bg); }
+
+/* Cards-per-round stepper */
+.setting-stepper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.setting-stepper button {
+  background: var(--border);
+  color: var(--text-strong);
+  border-radius: 6px;
+  width: 30px;
+  height: 30px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, color 0.15s;
+}
+
+.setting-stepper button:hover:not(:disabled) { background: var(--accent-dim); color: var(--accent); }
+.setting-stepper button:disabled             { opacity: 0.25; cursor: default; }
+
+.setting-stepper span {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-strong);
+  min-width: 20px;
+  text-align: center;
+}
+
+.setting-coming-soon {
+  font-size: 0.78rem;
+  color: var(--border);
+  font-style: italic;
+}
+
+/* Dim the entire row for disabled/placeholder settings */
+.setting-row--disabled { opacity: 0.45; }
+
+/* Category filter row — stacks vertically */
+.setting-row--col {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.setting-row-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.setting-filter-hint {
+  font-size: 0.75rem;
+  color: var(--text);
+  margin: 0;
+}
+
+.setting-filter-group-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text);
+  opacity: 0.5;
+  margin: 10px 0 4px;
+}
+
+/* Category filter chips */
+.category-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.category-chip {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: var(--border);
+  color: var(--text);
+  cursor: pointer;
+  border: 1.5px solid transparent;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.category-chip:hover { background: var(--accent-dim); color: var(--accent); }
+
+.category-chip.selected {
+  background: var(--accent-dim);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Category tag on event cards
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.card-category {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  opacity: 0.75;
+  line-height: 1;
+}
+
+/* ── Mobile playing phase: scrim + stacked layout ────────────────────────────
+   In playing phase on mobile the card root carries the image/gradient, so
+   card-content needs a darkening scrim for text readability. Switching to
+   column layout lets long category labels (e.g. "Science & Discovery") wrap
+   below the title instead of squeezing everything into one tight row. */
+.event-card.mobile-bg .card-content {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  /* Gradient: lighter on the left (near the grip) → darker toward the text */
+  background: linear-gradient(90deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.58) 100%);
+}
+
+/* Category label: full opacity and slightly larger on the scrim background */
+.event-card.mobile-bg .card-category {
+  opacity: 1;
+  font-size: 0.62rem;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Result screen action row
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.result-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+/* Next Round inherits btn-submit but loses the fixed width */
+.btn-next-round {
+  width: auto;
+  flex: 1;
+  min-width: 140px;
+  margin-top: 0;
+}
+
+.btn-new-game {
+  padding: 13px 20px;
+  background: var(--border);
+  color: var(--text-strong);
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 10px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.btn-new-game:hover {
+  background: var(--accent-dim);
+  color: var(--accent);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Start / New Game modal
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Full-screen backdrop — always visible when modal is mounted */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(6px);
+  padding: 16px;
+  box-sizing: border-box;
+  /* Fade in on mount */
+  animation: modal-fade-in 0.2s ease;
+}
+
+@keyframes modal-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Dialog card */
+.modal {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 28px 24px 24px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+  /* Slide up on mount */
+  animation: modal-slide-in 0.22s cubic-bezier(0.34, 1.2, 0.64, 1);
+}
+
+@keyframes modal-slide-in {
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* Title block */
+.modal-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.modal-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: var(--accent);
+}
+
+.modal-subtitle {
+  font-size: 0.85rem;
+  color: var(--text);
+  margin-top: 4px;
+}
+
+/* Each settings section */
+.modal-section {
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+  margin-top: 4px;
+}
+
+/* Section heading label */
+.modal-section-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text);
+  opacity: 0.55;
+  margin-bottom: 6px;
+}
+
+/* Remove the border-bottom on the last setting row within a section */
+.modal-section-last-row {
+  border-bottom: none !important;
+}
+
+/* Filter section header: label + Clear button side by side */
+.modal-filter-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2px;
+}
+
+/* Each Era/Theme/Region group */
+.modal-filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+/* Dim group label (Era, Theme, Region) */
+.modal-filter-group-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text);
+  opacity: 0.45;
+}
+
+/* Start Game button fills the full modal width */
+.modal-start-btn {
+  width: 100%;
+  margin-top: 20px;
+}

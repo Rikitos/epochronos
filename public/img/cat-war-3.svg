@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 250">
+  <rect width="400" height="250" fill="#160606"/>
+  <!-- smoke / haze glow -->
+  <ellipse cx="165" cy="95" rx="70" ry="50" fill="#8a6010" opacity="0.1"/>
+  <ellipse cx="90" cy="70" rx="50" ry="35" fill="#c9a84c" opacity="0.06"/>
+  <!-- muzzle smoke puff -->
+  <circle cx="80" cy="100" r="22" fill="#1e0e0e" opacity="0.7"/>
+  <circle cx="62" cy="88" r="16" fill="#1e0e0e" opacity="0.6"/>
+  <circle cx="72" cy="74" r="20" fill="#1e0e0e" opacity="0.5"/>
+  <circle cx="96" cy="68" r="14" fill="#281010" opacity="0.5"/>
+  <!-- barrel -->
+  <rect x="88" y="110" width="200" height="36" rx="18" fill="#2e1010"/>
+  <!-- barrel end cap (left/muzzle) -->
+  <ellipse cx="88" cy="128" rx="14" ry="18" fill="#3a1818"/>
+  <!-- barrel rings / bands -->
+  <ellipse cx="150" cy="128" rx="8" ry="18" fill="none" stroke="#3a1818" stroke-width="8"/>
+  <ellipse cx="200" cy="128" rx="8" ry="18" fill="none" stroke="#3a1818" stroke-width="8"/>
+  <ellipse cx="250" cy="128" rx="8" ry="18" fill="none" stroke="#3a1818" stroke-width="8"/>
+  <!-- barrel breech (right end, wider) -->
+  <ellipse cx="288" cy="128" rx="14" ry="21" fill="#3a1818"/>
+  <!-- touch hole on top of breech -->
+  <circle cx="275" cy="111" r="5" fill="#1a0808"/>
+  <!-- carriage side panel -->
+  <polygon points="96,146 304,146 320,195 80,195" fill="#2a1508"/>
+  <!-- carriage front face -->
+  <rect x="78" y="160" width="20" height="35" rx="3" fill="#22100a"/>
+  <!-- carriage rear face -->
+  <rect x="300" y="158" width="22" height="37" rx="3" fill="#22100a"/>
+  <!-- left wheel -->
+  <circle cx="112" cy="198" r="36" fill="none" stroke="#2a1508" stroke-width="14"/>
+  <circle cx="112" cy="198" r="36" fill="none" stroke="#3a2010" stroke-width="4"/>
+  <!-- wheel spokes -->
+  <line x1="112" y1="162" x2="112" y2="234" stroke="#2a1508" stroke-width="6"/>
+  <line x1="76" y1="198" x2="148" y2="198" stroke="#2a1508" stroke-width="6"/>
+  <line x1="88" y1="172" x2="136" y2="224" stroke="#2a1508" stroke-width="5"/>
+  <line x1="136" y1="172" x2="88" y2="224" stroke="#2a1508" stroke-width="5"/>
+  <circle cx="112" cy="198" r="10" fill="#3a2010"/>
+  <!-- right wheel -->
+  <circle cx="288" cy="198" r="36" fill="none" stroke="#2a1508" stroke-width="14"/>
+  <circle cx="288" cy="198" r="36" fill="none" stroke="#3a2010" stroke-width="4"/>
+  <line x1="288" y1="162" x2="288" y2="234" stroke="#2a1508" stroke-width="6"/>
+  <line x1="252" y1="198" x2="324" y2="198" stroke="#2a1508" stroke-width="6"/>
+  <line x1="264" y1="172" x2="312" y2="224" stroke="#2a1508" stroke-width="5"/>
+  <line x1="312" y1="172" x2="264" y2="224" stroke="#2a1508" stroke-width="5"/>
+  <circle cx="288" cy="198" r="10" fill="#3a2010"/>
+  <!-- cannonballs on ground -->
+  <circle cx="345" cy="210" r="13" fill="#2a1010"/>
+  <circle cx="365" cy="218" r="10" fill="#231010"/>
+  <circle cx="326" cy="218" r="10" fill="#231010"/>
+</svg>
