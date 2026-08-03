@@ -2,15 +2,15 @@
 // Renders the interactive card list during the 'playing' phase.
 //
 // Props:
-//   cards        — current ordered array of event objects from useGame
-//   setCards     — direct setter used by dnd-kit's arrayMove after a drag
-//   onMoveCard   — arrow-button handler from useGame (swap by index)
-//   onSubmit     — called when the player is happy with their order
-//   onCardInfo   — opens the event info bottom sheet for a given event
-//   isVertical   — true on mobile (< 640px); EventCard shows ▲▼ arrows
-//   isWide       — true on large screens (1100px+); triggers 2-row grid logic
-//   timedSeconds — seconds for countdown timer; 0 = timer off
-//   showImages   — when true, EventCard shows SVG/photo instead of gradient
+//   cards        - current ordered array of event objects from useGame
+//   setCards     - direct setter used by dnd-kit's arrayMove after a drag
+//   onMoveCard   - arrow-button handler from useGame (swap by index)
+//   onSubmit     - called when the player is happy with their order
+//   onCardInfo   - opens the event info bottom sheet for a given event
+//   isVertical   - true on mobile (< 640px); EventCard shows ▲▼ arrows
+//   isWide       - true on large screens (1100px+); triggers 2-row grid logic
+//   timedSeconds - seconds for countdown timer; 0 = timer off
+//   showImages   - when true, EventCard shows SVG/photo instead of gradient
 //
 // Sort strategy selection:
 //   isVertical → verticalListSortingStrategy   (single column)
@@ -102,7 +102,7 @@ export function GameBoard({ cards, setCards, onMoveCard, onSubmit, onCardInfo, i
 
   return (
     <div className="game-board">
-      {/* Countdown bar — only shown when timed mode is active */}
+      {/* Countdown bar - only shown when timed mode is active */}
       {timedSeconds > 0 && (
         <div className="timer">
           <div className="timer-bar">

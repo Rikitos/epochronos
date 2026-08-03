@@ -2,42 +2,60 @@
 // Entry point for all event data and game logic.
 //
 // Raw event arrays live in ./events/ split by primary region:
-//   ancient.js  — ancient Greece and Rome
-//   england.js  — English / British history
-//   france.js   — French history
-//   poland.js   — Polish history
-//   europe.js   — pan-European and world events
+//   ancient.js  - cross-cultural ancient-world events (no single region)
+//   greece.js   - Greek city-states, Persian Wars, Classical Athens
+//   rome.js     - Roman history (founding through Republic and Empire)
+//   england.js  - English / British history
+//   france.js   - French history
+//   germany.js  - German / Frankish history
+//   italy.js    - Italian history (Ostrogoths, Byzantines, Lombards, Papacy, Venice)
+//   spain.js    - Spanish history (Visigoths, Al-Andalus, Reconquista, empire)
+//   russia.js   - Eastern European / Rus / Russian history
+//   poland.js   - Polish history
+//   europe.js   - pan-European and world events
 //
 // To add new events: edit the appropriate region file, or create a new one
 // and import it here. This file owns all constants, helpers, and image/colour
 // maps; the region files are purely data (no imports needed).
 //
 // Event data shape: { id, title, year, description, categories, scope, image? }
-//   year        — integer; negative = BC (e.g. -490 = 490 BC)
-//   id          — stable slug used as React key and dnd-kit draggable id
-//   categories  — ordered array; categories[0] must be a theme slug
-//   scope       — 'global' | 'regional' | 'national'
-//   image       — optional '/img/...' path; pins a specific image to this event,
+//   year        - integer; negative = BC (e.g. -490 = 490 BC)
+//   id          - stable slug used as React key and dnd-kit draggable id
+//   categories  - ordered array; categories[0] must be a theme slug
+//   scope       - 'global' | 'regional' | 'national'
+//   image       - optional '/img/...' path; pins a specific image to this event,
 //                 overriding the category/era lookup entirely
 // ───────────────────────────────────────────────────────────────────────────
 
-import { ancientEvents } from './events/ancient';
-import { englandEvents } from './events/england';
-import { franceEvents  } from './events/france';
-import { polandEvents  } from './events/poland';
-import { europeEvents  } from './events/europe';
+import { ancientEvents  } from './events/ancient';
+import { greeceEvents   } from './events/greece';
+import { romeEvents     } from './events/rome';
+import { englandEvents  } from './events/england';
+import { franceEvents   } from './events/france';
+import { germanyEvents  } from './events/germany';
+import { italyEvents    } from './events/italy';
+import { spainEvents    } from './events/spain';
+import { russiaEvents   } from './events/russia';
+import { polandEvents   } from './events/poland';
+import { europeEvents   } from './events/europe';
 
 // Merge all region arrays into a single pool; order within the array doesn't
 // matter because getRandomRound always shuffles before dealing.
 export const events = [
   ...ancientEvents,
+  ...greeceEvents,
+  ...romeEvents,
   ...englandEvents,
   ...franceEvents,
+  ...germanyEvents,
+  ...italyEvents,
+  ...spainEvents,
+  ...russiaEvents,
   ...polandEvents,
   ...europeEvents,
 ];
 
-// The 5 canonical themes — first category on every event must be one of these.
+// The 5 canonical themes - first category on every event must be one of these.
 // The card's "show categories" label displays the theme, not the region.
 export const THEMES = ['warfare', 'politics', 'science', 'trade', 'society'];
 
@@ -53,14 +71,14 @@ export const THEME_LABELS = {
 // Region slugs used for the filter UI alongside themes and eras.
 export const ALL_CATEGORIES = [
   ...THEMES,
-  'europe', 'greece', 'rome', 'france', 'england', 'poland', 'germany',
+  'europe', 'greece', 'rome', 'france', 'england', 'italy', 'spain', 'poland', 'germany', 'russia',
 ];
 
 // Scope levels ordered from broadest to most specific.
 // An event's scope describes how far its significance reaches.
 export const SCOPE_LEVELS = [
   { slug: 'global',   name: 'Global',   desc: 'Only world-changing, must-know events' },
-  { slug: 'regional', name: 'Regional', desc: 'Regional and global significance — broader pool' },
+  { slug: 'regional', name: 'Regional', desc: 'Regional and global significance - broader pool' },
   { slug: 'national', name: 'National', desc: 'All events, including country-specific ones' },
 ];
 
@@ -68,7 +86,7 @@ export const SCOPE_LEVELS = [
 // Each era has a display name and an inclusive date range.
 // start is undefined for the first era (covers everything before end).
 // end is undefined for an open-ended era.
-// Events are assigned to an era by year at runtime — no era tag needed on the event itself.
+// Events are assigned to an era by year at runtime - no era tag needed on the event itself.
 export const ERA_RANGES = [
   { slug: 'ancient',            name: 'Ancient',            end: 475 },
   { slug: 'early-medieval',     name: 'Early Medieval',     start: 476,  end: 999  },
@@ -120,8 +138,11 @@ const CATEGORY_COLORS = {
   rome:    ['#180a00', '#502810'],
   france:  ['#06061a', '#10105c'],
   england: ['#06101a', '#122850'],
+  italy:   ['#0e0804', '#2c1a08'],  // dark terracotta-amber
+  spain:   ['#1a0400', '#501000'],  // dark crimson-sienna
   poland:  ['#180008', '#540018'],
   germany: ['#080808', '#222222'],
+  russia:  ['#080412', '#1c0c38'],  // deep violet-blue (Orthodox imperial)
 };
 
 // ── Category images ───────────────────────────────────────────────────────
@@ -156,11 +177,11 @@ const CATEGORY_IMAGES = {
     '/img/cat-politics.svg',     // Scroll / law document with text lines
     '/img/cat-politics-2.svg',   // Scales of justice in a globe
     '/img/cat-politics-3.svg',   // Parliament building with columns
-    '/img/cat-politics-4.svg',   // Gavels / hammers crossed — authority
+    '/img/cat-politics-4.svg',   // Gavels / hammers crossed - authority
   ],
   science:  [
-    '/img/cat-innovation.svg',   // Lightbulb with rays — idea / invention
-    '/img/cat-innovation-2.svg', // Chemistry flask — science and discovery
+    '/img/cat-innovation.svg',   // Lightbulb with rays - idea / invention
+    '/img/cat-innovation-2.svg', // Chemistry flask - science and discovery
     '/img/cat-innovation-3.svg', // Calculator with arithmetic operators
     '/img/cat-innovation-4.svg', // Atom diagram with orbital nodes
   ],
@@ -185,10 +206,10 @@ const CATEGORY_IMAGES = {
   ],
   // ── Legacy key preserved so old innovation references still resolve ───
   innovation: [
-    '/img/cat-innovation.svg',   // Lightbulb with rays — idea / invention
-    '/img/cat-innovation-2.svg', // Chemistry flask — science and discovery
-    '/img/cat-innovation-3.svg', // Calculator with arithmetic operators — math and science
-    '/img/cat-innovation-4.svg', // Atom diagram with orbital nodes — physics and discovery
+    '/img/cat-innovation.svg',   // Lightbulb with rays - idea / invention
+    '/img/cat-innovation-2.svg', // Chemistry flask - science and discovery
+    '/img/cat-innovation-3.svg', // Calculator with arithmetic operators - math and science
+    '/img/cat-innovation-4.svg', // Atom diagram with orbital nodes - physics and discovery
   ],
 };
 
@@ -201,7 +222,7 @@ const VISUAL_SUBTYPES = new Set(['exploration']);
 // Sub-types are extracted and promoted so 'exploration' beats 'science' without
 // changing the categories[0] = theme slug rule.
 export function getCategoryImage(categories = [], eventId = '', year = null, image = null) {
-  // Event-level pin overrides everything — add `image: '/img/...'` to the event object
+  // Event-level pin overrides everything - add `image: '/img/...'` to the event object
   if (image) return image;
   const era  = year !== null ? getEraFromYear(year) : null;
   const hash = eventId.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
@@ -216,7 +237,7 @@ export function getCategoryImage(categories = [], eventId = '', year = null, ima
 }
 
 // Return a CSS gradient string for a card.
-// Era (derived from year) always takes precedence — it is date-accurate and
+// Era (derived from year) always takes precedence - it is date-accurate and
 // gives each historical period a distinct colour without relying on manual tags.
 // Falls back to the first explicit category if the year is outside all defined eras.
 export function getCategoryStyle(categories = [], year = null) {
@@ -238,12 +259,12 @@ export function getCategoryStyle(categories = [], year = null) {
 const SCOPE_RANK = { global: 0, regional: 1, national: 2 };
 
 // Regions at country level imply national ceiling; continent level imply regional ceiling.
-const COUNTRY_REGIONS    = new Set(['france', 'england', 'poland', 'greece', 'rome', 'germany']);
+const COUNTRY_REGIONS    = new Set(['france', 'england', 'poland', 'greece', 'rome', 'germany', 'italy', 'spain', 'russia']);
 const CONTINENT_REGIONS  = new Set(['europe']);
 
 // Returns the effective scope ceiling slug for filtering.
 // Manual allowedScopes takes priority; otherwise derived from the selected regions.
-// Default (no region, no manual scope) = 'global' — shows only world-significant events.
+// Default (no region, no manual scope) = 'global' - shows only world-significant events.
 function getScopeCeiling(allowedCategories, allowedScopes) {
   if (allowedScopes && allowedScopes.length > 0) {
     // Use the most inclusive (highest rank) manually selected scope as the ceiling
@@ -257,7 +278,7 @@ function getScopeCeiling(allowedCategories, allowedScopes) {
 }
 
 // Pick `count` random events filtered by category and scope ceiling.
-// Era is computed from each event's year — no era tag needed on the event.
+// Era is computed from each event's year - no era tag needed on the event.
 // allowedCategories: era/theme/region slugs to draw from; [] or null = no category filter
 // allowedScopes: single-element array with the chosen ceiling slug; [] = auto-derive from regions
 // If the filtered pool is smaller than count, draw as many as available (min 1).

@@ -1,10 +1,10 @@
 // ── InfoIcon.jsx ─────────────────────────────────────────────────────────────
-// Inline SVG info icon — used in the header help button and on each event card.
+// Inline SVG info icon - used in the header help button and on each event card.
 // SVG guarantees crisp rendering at any size and any pixel density, unlike
 // Unicode characters (ⓘ) which depend on system font glyph rendering.
 //
 // Props:
-//   size — pixel dimension for both width and height (default 16)
+//   size - pixel dimension for both width and height (default 16)
 // ────────────────────────────────────────────────────────────────────────────
 
 export function InfoIcon({ size = 16 }) {

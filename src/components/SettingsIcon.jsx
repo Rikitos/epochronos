@@ -1,7 +1,7 @@
 // ── SettingsIcon.jsx ─────────────────────────────────────────────────────────
 // Inline SVG gear/settings icon. SVG ensures crisp rendering at every DPI.
 // Props:
-//   size — pixel dimension for both width and height (default 16)
+//   size - pixel dimension for both width and height (default 16)
 // ────────────────────────────────────────────────────────────────────────────
 
 export function SettingsIcon({ size = 16 }) {

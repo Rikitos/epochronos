@@ -2,25 +2,25 @@
 // Single draggable event card. Adapts to two layout modes via CSS:
 //
 //   Vertical (mobile, < 640px):
-//     Horizontal bar — gradient or image fills card background. A narrow
+//     Horizontal bar - gradient or image fills card background. A narrow
 //     grip-handle strip on the left carries the dnd-kit listeners and
 //     touch-action:none so the rest of the card allows page scroll.
 //
 //   Horizontal (desktop, 640px+):
-//     Portrait tile — full gradient/image area at top, title below,
+//     Portrait tile - full gradient/image area at top, title below,
 //     ◀▶ controls at the bottom. The entire card surface is the drag handle.
 //
 // Props:
-//   event       — { id, title, year, description, categories }
-//   index       — 0-based position; displayed as 1-based badge
-//   total       — total cards; used to disable boundary arrow buttons
-//   onMoveUp    — move earlier callback (left / up)
-//   onMoveDown  — move later callback (right / down)
-//   showResult  — true in results phase; reveals year and correct/incorrect style
-//   isCorrect   — only meaningful when showResult is true
-//   onInfo      — called with the event object when the card or ⓘ is tapped
-//   isVertical  — true when the list is a vertical column; switches arrow labels
-//   showImages  — when true, use SVG/photo background instead of CSS gradient
+//   event       - { id, title, year, description, categories }
+//   index       - 0-based position; displayed as 1-based badge
+//   total       - total cards; used to disable boundary arrow buttons
+//   onMoveUp    - move earlier callback (left / up)
+//   onMoveDown  - move later callback (right / down)
+//   showResult  - true in results phase; reveals year and correct/incorrect style
+//   isCorrect   - only meaningful when showResult is true
+//   onInfo      - called with the event object when the card or ⓘ is tapped
+//   isVertical  - true when the list is a vertical column; switches arrow labels
+//   showImages  - when true, use SVG/photo background instead of CSS gradient
 // ───────────────────────────────────────────────────────────────────────────
 
 import { useSortable } from '@dnd-kit/sortable';
@@ -28,7 +28,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { InfoIcon } from './InfoIcon';
 import { getCategoryStyle, getCategoryImage, THEME_LABELS } from '../data/events';
 
-// Six-dot grip icon — universally understood drag handle
+// Six-dot grip icon - universally understood drag handle
 function DragDots() {
   return (
     <svg width="10" height="16" viewBox="0 0 10 16" fill="currentColor" aria-hidden="true">
@@ -55,17 +55,22 @@ export function EventCard({
     attributes, listeners, setNodeRef, transform, transition, isDragging,
   } = useSortable({ id: event.id });
 
-  // Resolve visual: era is derived from year inside both helpers — no era tag needed on the event
+  // Resolve visual: era is derived from year inside both helpers - no era tag needed on the event
   const imageUrl   = showImages ? getCategoryImage(event.categories, event.id, event.year, event.image) : null;
   const bgGradient = getCategoryStyle(event.categories, event.year);
 
-  // card-image background style — image or gradient
+  // card-image background style - image over gradient so the era colour fills letterbox space
   const imageBg = imageUrl
-    ? { backgroundImage: `url(${imageUrl})`, backgroundSize: 'contain', backgroundPosition: 'center center', backgroundRepeat: 'no-repeat' }
+    ? {
+        backgroundImage: `url(${imageUrl}), ${bgGradient}`,
+        backgroundSize: 'contain, cover',
+        backgroundPosition: 'center center, center',
+        backgroundRepeat: 'no-repeat, no-repeat',
+      }
     : { background: bgGradient };
 
   // On mobile in playing phase: background applied to the card itself (not a child element).
-  // Portrait mobile always uses the CSS gradient — images only appear in landscape/desktop
+  // Portrait mobile always uses the CSS gradient - images only appear in landscape/desktop
   // via the card-image div. This ensures text is always readable without a scrim.
   const mobileGradient = isVertical && !showResult;
   const mobileBg = { background: bgGradient };
@@ -106,7 +111,7 @@ export function EventCard({
       onClick={() => onInfo?.(event)}
     >
       {mobileGradient ? (
-        /* Narrow grip strip — owns touch-action:none and the dnd-kit listeners */
+        /* Narrow grip strip - owns touch-action:none and the dnd-kit listeners */
         <div
           className="card-grip"
           {...listeners}
@@ -121,7 +126,7 @@ export function EventCard({
         <div className="card-image" style={imageBg} />
       )}
 
-      {/* Position badge — only outside the grip strip (desktop / results phase) */}
+      {/* Position badge - only outside the grip strip (desktop / results phase) */}
       {!mobileGradient && <span className="card-position">{index + 1}</span>}
 
       {/* Title, optional category tag, and optional year */}

@@ -4,10 +4,10 @@
 // uses the same layout but fills more of the screen.
 //
 // Props:
-//   defaults — current setting values used to pre-populate the draft form:
+//   defaults - current setting values used to pre-populate the draft form:
 //              { cardsPerRound, timedSeconds, showImages, showCategories,
 //                allowedCategories, allowedScopes }
-//   onStart  — called with the same shape when the player clicks Start Game
+//   onStart  - called with the same shape when the player clicks Start Game
 // ───────────────────────────────────────────────────────────────────────────
 
 import { useState } from 'react';
@@ -37,19 +37,21 @@ const FILTER_GROUPS = [
   {
     label: 'Region',
     items: [
+      { slug: 'europe',  label: 'Europe' },
       { slug: 'england', label: 'England' },
       { slug: 'france',  label: 'France' },
-      { slug: 'poland',  label: 'Poland' },
-      { slug: 'europe',  label: 'Europe' },
-      { slug: 'greece',  label: 'Greece' },
-      { slug: 'rome',    label: 'Rome' },
       { slug: 'germany', label: 'Germany' },
+      { slug: 'greece',  label: 'Greece' },
+      { slug: 'poland',  label: 'Poland' },
+      { slug: 'rome',    label: 'Rome' },
+      { slug: 'russia',  label: 'Russia' },
+      { slug: 'spain',   label: 'Spain' },
     ],
   },
 ];
 
 export function StartModal({ defaults, onStart }) {
-  // Local draft settings — changes here don't affect the running game until Start is clicked
+  // Local draft settings - changes here don't affect the running game until Start is clicked
   const [cardsPerRound,     setCardsPerRound]     = useState(defaults.cardsPerRound);
   const [timedSeconds,      setTimedSeconds]      = useState(defaults.timedSeconds);
   const [showImages,        setShowImages]        = useState(defaults.showImages);
@@ -67,7 +69,7 @@ export function StartModal({ defaults, onStart }) {
       prev.includes(slug) ? prev.filter(s => s !== slug) : [...prev, slug]
     );
 
-  // Scope is a ceiling selector — clicking always sets exactly one level
+  // Scope is a ceiling selector - clicking always sets exactly one level
   const setScope = (slug) => setAllowedScopes([slug]);
 
   function handleStart() {
@@ -98,7 +100,7 @@ export function StartModal({ defaults, onStart }) {
             </div>
           </div>
 
-          {/* Timed mode stepper — cycles TIMER_OPTIONS */}
+          {/* Timed mode stepper - cycles TIMER_OPTIONS */}
           <div className="setting-row">
             <span className="setting-label">Timed mode</span>
             <div className="setting-stepper">
@@ -145,7 +147,7 @@ export function StartModal({ defaults, onStart }) {
           </div>
           <p className="setting-filter-hint" style={{ marginBottom: 10 }}>
             {allowedCategories.length === 0
-              ? 'All of history — no filter applied'
+              ? 'All of history - no filter applied'
               : `${allowedCategories.length} filter${allowedCategories.length > 1 ? 's' : ''} active`}
           </p>
 
@@ -168,13 +170,13 @@ export function StartModal({ defaults, onStart }) {
           ))}
         </section>
 
-        {/* ── Scope ceiling — selecting a level includes it and all broader scopes ── */}
+        {/* ── Scope ceiling - selecting a level includes it and all broader scopes ── */}
         <section className="modal-section">
           <p className="modal-section-label">Significance</p>
           <p className="setting-filter-hint" style={{ marginBottom: 10 }}>
             {allowedScopes[0] === 'global'   ? 'World-changing events only'         :
              allowedScopes[0] === 'regional' ? 'Regional and global events'         :
-                                               'All events — including local history'}
+                                               'All events - including local history'}
           </p>
           <div className="category-chips">
             {SCOPE_LEVELS.map(({ slug, name, desc }) => (

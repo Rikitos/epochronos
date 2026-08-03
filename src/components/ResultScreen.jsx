@@ -5,21 +5,21 @@
 // start the next round or open the New Game modal.
 //
 // Props:
-//   results        — enriched card array: { ...event, isCorrect, correctPosition }
+//   results        - enriched card array: { ...event, isCorrect, correctPosition }
 //                    in the order the player submitted (not the correct order)
-//   score          — session totals: { correct: number, total: number }
-//   onNext         — callback to trigger the next round (same settings)
-//   onNewGame      — callback to open the Start modal (resets score)
-//   onCardInfo     — opens the event info bottom sheet for a given event
-//   isVertical     — forwarded to EventCard to switch arrow labels (▲▼ vs ◀▶)
-//   showImages     — forwarded to EventCard
-//   showCategories — forwarded to EventCard
+//   score          - session totals: { correct: number, total: number }
+//   onNext         - callback to trigger the next round (same settings)
+//   onNewGame      - callback to open the Start modal (resets score)
+//   onCardInfo     - opens the event info bottom sheet for a given event
+//   isVertical     - forwarded to EventCard to switch arrow labels (▲▼ vs ◀▶)
+//   showImages     - forwarded to EventCard
+//   showCategories - forwarded to EventCard
 // ───────────────────────────────────────────────────────────────────────────
 
 import { EventCard } from './EventCard';
 
 export function ResultScreen({ results, score, onNext, onNewGame, onCardInfo, isVertical, isWide, showImages, showCategories }) {
-  // Derive round summary from results — always computable, no extra state needed
+  // Derive round summary from results - always computable, no extra state needed
   const correctCount = results.filter(r => r.isCorrect).length;
   const total = results.length;
   const perfect = correctCount === total; // true only if every card was in the right slot

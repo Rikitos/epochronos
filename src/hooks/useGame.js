@@ -39,7 +39,7 @@ export function useGame(cardsPerRound = 6, allowedCategories = null, allowedScop
   // Used by the arrow buttons; drag-and-drop uses setCards + arrayMove directly.
   const moveCard = useCallback((fromIndex, toIndex) => {
     setCards(prev => {
-      const next = [...prev]; // copy — never mutate state directly
+      const next = [...prev]; // copy - never mutate state directly
       const [moved] = next.splice(fromIndex, 1);
       next.splice(toIndex, 0, moved);
       return next;
@@ -47,7 +47,7 @@ export function useGame(cardsPerRound = 6, allowedCategories = null, allowedScop
   }, []);
 
   // Evaluate the player's current card order against the correct chronological order.
-  // Algorithm: sort a copy of cards by year, then compare position-by-position —
+  // Algorithm: sort a copy of cards by year, then compare position-by-position -
   // a card is correct only if it ended up in the exact same slot as the sorted version.
   const submit = useCallback(() => {
     const correct = [...cards].sort((a, b) => a.year - b.year); // copy before sorting
@@ -64,7 +64,7 @@ export function useGame(cardsPerRound = 6, allowedCategories = null, allowedScop
 
     setResults(roundResults);
 
-    // Accumulate into session score — functional update to avoid stale closure
+    // Accumulate into session score - functional update to avoid stale closure
     setScore(prev => ({
       correct: prev.correct + correctCount,
       total: prev.total + cards.length,
@@ -80,7 +80,7 @@ export function useGame(cardsPerRound = 6, allowedCategories = null, allowedScop
     setPhase('playing');
   }, [cardsPerRound, allowedCategories, allowedScopes]);
 
-  // Full game reset triggered by the New Game modal — wipes the session score
+  // Full game reset triggered by the New Game modal - wipes the session score
   // and deals a fresh round with the settings chosen in the modal.
   // Takes explicit arguments so App can pass the new values without waiting
   // for its own state to flush (React batches the updates in the same event).

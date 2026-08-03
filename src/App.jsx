@@ -7,14 +7,14 @@
 // "Start Game" is confirmed; settings sheet changes apply immediately.
 //
 // Layout is responsive:
-//   < 640px    — vertical stack (mobile portrait)
-//   640–1099px — horizontal scrollable row
-//   1100px+    — 1 row (≤ 6 cards) or 2-row grid (≥ 7 cards)
+//   < 640px    - vertical stack (mobile portrait)
+//   640–1099px - horizontal scrollable row
+//   1100px+    - 1 row (≤ 6 cards) or 2-row grid (≥ 7 cards)
 //
 // Sheet types:
-//   'howToPlay' — header ⓘ
-//   'eventInfo' — card ⓘ / card tap
-//   'settings'  — header ⚙
+//   'howToPlay' - header ⓘ
+//   'eventInfo' - card ⓘ / card tap
+//   'settings'  - header ⚙
 // ───────────────────────────────────────────────────────────────────────────
 
 import { useEffect, useState } from 'react';
@@ -58,20 +58,26 @@ function HowToPlay() {
         <li>Drag a card to reorder it</li>
         <li>Use the arrow buttons to nudge one step at a time</li>
         <li>Tap a card or its ⓘ to learn more about that event</li>
-        <li>Your score builds up across rounds — no reset!</li>
+        <li>Your score builds up across rounds - no reset!</li>
       </ul>
     </>
   );
 }
 
-// Year is only shown in results phase — revealing it mid-round would be cheating
+// Year is only shown in results phase - revealing it mid-round would be cheating
 function EventInfo({ event, showYear }) {
   // Always show the image in the info sheet regardless of the game "show images" toggle.
   // SVGs have their own dark background rect so no gradient fill is needed behind them.
   const imageUrl = getCategoryImage(event.categories, event.id, event.year, event.image);
   const fallbackGradient = getCategoryStyle(event.categories, event.year);
+  // Layer image over gradient so the era colour fills letterbox space around the contained SVG
   const imageBg = imageUrl
-    ? { backgroundImage: `url(${imageUrl})`, backgroundSize: 'contain', backgroundPosition: 'center center', backgroundRepeat: 'no-repeat' }
+    ? {
+        backgroundImage: `url(${imageUrl}), ${fallbackGradient}`,
+        backgroundSize: 'contain, cover',
+        backgroundPosition: 'center center, center',
+        backgroundRepeat: 'no-repeat, no-repeat',
+      }
     : { background: fallbackGradient };
 
   return (
@@ -80,7 +86,6 @@ function EventInfo({ event, showYear }) {
       <p className="sheet-event-title">{event.title}</p>
       {showYear && <p className="sheet-event-year">{formatYear(event.year)}</p>}
       <p>{event.description}</p>
-      <p className="sheet-placeholder">More details coming soon.</p>
     </>
   );
 }
@@ -118,7 +123,7 @@ function SettingsSheet({
         </div>
       </div>
 
-      {/* Timed mode stepper — cycles through TIMER_OPTIONS */}
+      {/* Timed mode stepper - cycles through TIMER_OPTIONS */}
       <div className="setting-row">
         <span className="setting-label">Timed mode</span>
         <div className="setting-stepper">
@@ -162,11 +167,11 @@ function SettingsSheet({
         </div>
         <p className="setting-filter-hint">
           {allowedCategories.length === 0
-            ? 'All of history — no filter applied'
-            : `${allowedCategories.length} filter${allowedCategories.length !== 1 ? 's' : ''} active — next round`}
+            ? 'All of history - no filter applied'
+            : `${allowedCategories.length} filter${allowedCategories.length !== 1 ? 's' : ''} active - next round`}
         </p>
 
-        {/* Era chips — labelled from ERA_RANGES so names stay in sync */}
+        {/* Era chips - labelled from ERA_RANGES so names stay in sync */}
         <p className="setting-filter-group-label">Era</p>
         <div className="category-chips">
           {ERA_RANGES.map(({ slug, name }) => (
@@ -180,7 +185,7 @@ function SettingsSheet({
           ))}
         </div>
 
-        {/* Theme & Region chips — theme labels come from THEME_LABELS for readability */}
+        {/* Theme & Region chips - theme labels come from THEME_LABELS for readability */}
         <p className="setting-filter-group-label">Theme &amp; Region</p>
         <div className="category-chips">
           {ALL_CATEGORIES.map(cat => (
@@ -195,7 +200,7 @@ function SettingsSheet({
         </div>
       </div>
 
-      {/* Significance / scope ceiling — selecting a level includes it and everything above */}
+      {/* Significance / scope ceiling - selecting a level includes it and everything above */}
       <div className="setting-row setting-row--col">
         <div className="setting-row-head">
           <span className="setting-label">Significance</span>
@@ -203,7 +208,7 @@ function SettingsSheet({
         <p className="setting-filter-hint">
           {allowedScopes[0] === 'global'   ? 'World-changing events only'         :
            allowedScopes[0] === 'regional' ? 'Regional and global events'         :
-                                             'All events — including local history'}
+                                             'All events - including local history'}
         </p>
         <div className="category-chips">
           {SCOPE_LEVELS.map(({ slug, name, desc }) => (
@@ -228,7 +233,7 @@ export default function App() {
   // ── Settings state ────────────────────────────────────────────────────────
   const [cardsPerRound,     setCardsPerRound]     = useState(6);
   const [timedSeconds,      setTimedSeconds]      = useState(0);
-  const [showImages,        setShowImages]        = useState(true);
+  const [showImages,        setShowImages]        = useState(false);
   // showCategories: display the primary category tag on each card
   const [showCategories,    setShowCategories]    = useState(true);
   // allowedCategories: [] = all; populated = only those categories drawn
@@ -242,7 +247,7 @@ export default function App() {
       prev.includes(cat) ? prev.filter(c => c !== cat) : [...prev, cat]
     );
 
-  // Scope is a ceiling, not a toggle — clicking always sets exactly one level
+  // Scope is a ceiling, not a toggle - clicking always sets exactly one level
   const setScope = (scope) => setAllowedScopes([scope]);
 
   const { cards, setCards, phase, score, results, moveCard, submit, nextRound, resetGame } =
@@ -261,7 +266,7 @@ export default function App() {
     setShowCategories(settings.showCategories);
     setAllowedCategories(settings.allowedCategories);
     setAllowedScopes(settings.allowedScopes ?? ['global']);
-    // Pass new values directly — don't rely on the state setters above having flushed yet
+    // Pass new values directly - don't rely on the state setters above having flushed yet
     resetGame(settings.cardsPerRound, settings.allowedCategories, settings.allowedScopes ?? []);
     setShowModal(false);
   }
@@ -336,7 +341,7 @@ export default function App() {
         )}
       </main>
 
-      {/* Start / New Game modal — shown on first load and on restart */}
+      {/* Start / New Game modal - shown on first load and on restart */}
       {showModal && (
         <StartModal
           defaults={{

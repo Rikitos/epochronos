@@ -79,7 +79,7 @@
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   Card list — default: vertical column (mobile portrait)
+   Card list - default: vertical column (mobile portrait)
    ══════════════════════════════════════════════════════════════════════════ */
 
 .card-list {
@@ -92,7 +92,7 @@
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   Event card — default: horizontal bar (vertical list mode)
+   Event card - default: horizontal bar (vertical list mode)
    ══════════════════════════════════════════════════════════════════════════ */
 
 .event-card {
@@ -117,7 +117,7 @@
 .event-card.correct  { background: var(--correct-bg); }
 .event-card.incorrect { background: var(--incorrect-bg); }
 
-/* ── Drag handle — mobile playing phase only ─────────────────────────────── */
+/* ── Drag handle - mobile playing phase only ─────────────────────────────── */
 /* Narrow left strip that owns the dnd-kit listeners and touch-action:none.
    The rest of the card is touch-action:auto so page scroll still works. */
 .card-grip {
@@ -144,7 +144,7 @@
   color: rgba(255, 255, 255, 0.6);
 }
 
-/* ── Card image — vertical mode: wide gradient strip on left ─────────────── */
+/* ── Card image - vertical mode: wide gradient strip on left ─────────────── */
 /* Covers roughly the left quarter of the card so category colour is visible */
 .card-image {
   width: 80px;
@@ -152,7 +152,7 @@
   flex-shrink: 0;
 }
 
-/* ── Position badge — overlaid on the gradient in all modes ──────────────── */
+/* ── Position badge - overlaid on the gradient in all modes ──────────────── */
 .card-position {
   position: absolute;
   left: 12px;
@@ -161,7 +161,7 @@
   z-index: 1;
   font-size: 0.7rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--accent);
   background: rgba(0, 0, 0, 0.38);
   border-radius: 50%;
   width: 22px;
@@ -198,7 +198,7 @@
   flex-shrink: 0;
 }
 
-/* ── Info button — vertical mode: in flow ────────────────────────────────── */
+/* ── Info button - vertical mode: in flow ────────────────────────────────── */
 .card-info-btn {
   flex-shrink: 0;
   background: none;
@@ -213,7 +213,7 @@
 
 .card-info-btn:hover { color: var(--accent); }
 
-/* ── Arrow controls — vertical mode: column on right ────────────────────── */
+/* ── Arrow controls - vertical mode: column on right ────────────────────── */
 .card-controls {
   display: flex;
   flex-direction: column;
@@ -323,7 +323,7 @@
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   Horizontal layout — 640px and wider
+   Horizontal layout - 640px and wider
    Cards become portrait tiles arranged in a scrollable row.
    ══════════════════════════════════════════════════════════════════════════ */
 
@@ -392,7 +392,7 @@
     top: 7px;
     right: 7px;
     background: rgba(0, 0, 0, 0.4);
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--accent);
     border-radius: 50%;
     width: 22px;
     height: 22px;
@@ -425,7 +425,7 @@
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   Large-screen grid — 1100px and wider
+   Large-screen grid - 1100px and wider
    Default: single row (grid-auto-flow: column, cards fill left to right).
    card-list--two-row: 2 explicit rows, cards fill column-by-column, so the
    left-to-right reading order spans both rows naturally.
@@ -550,7 +550,7 @@
   line-height: 1.9;
 }
 
-/* Event image shown in the info bottom sheet — contain so tall SVGs aren't cropped */
+/* Event image shown in the info bottom sheet - contain so tall SVGs aren't cropped */
 .sheet-event-image {
   width: 100%;
   height: 180px;
@@ -653,7 +653,7 @@
 /* Dim the entire row for disabled/placeholder settings */
 .setting-row--disabled { opacity: 0.45; }
 
-/* Category filter row — stacks vertically */
+/* Category filter row - stacks vertically */
 .setting-row--col {
   flex-direction: column;
   align-items: flex-start;
@@ -780,7 +780,7 @@
    Start / New Game modal
    ══════════════════════════════════════════════════════════════════════════ */
 
-/* Full-screen backdrop — always visible when modal is mounted */
+/* Full-screen backdrop - always visible when modal is mounted */
 .modal-overlay {
   position: fixed;
   inset: 0;
