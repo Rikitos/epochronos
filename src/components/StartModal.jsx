@@ -16,6 +16,14 @@ import { ERA_RANGES, SCOPE_LEVELS } from '../data/events';
 // Preset timer values; 0 means off
 const TIMER_OPTIONS = [0, 15, 30, 45, 60, 90, 120];
 
+// Slugs that represent specific countries or regions (not themes or eras).
+// Selecting any of these means the player wants region-specific events, so we
+// automatically widen the scope ceiling to 'national' if it's still at 'global'.
+const REGION_SLUGS = new Set([
+  'europe', 'england', 'france', 'germany', 'greece',
+  'poland', 'rome', 'russia', 'spain', 'italy',
+]);
+
 // Category filter groups shown in the modal (era / theme / region).
 // Era items are generated from ERA_RANGES so they always stay in sync with events.js.
 const FILTER_GROUPS = [
@@ -63,11 +71,18 @@ export function StartModal({ defaults, onStart }) {
   // Index into TIMER_OPTIONS for the stepper buttons
   const timerIdx = TIMER_OPTIONS.indexOf(timedSeconds);
 
-  // Toggle a single category slug in/out of the filter selection
-  const toggleCategory = (slug) =>
-    setAllowedCategories(prev =>
-      prev.includes(slug) ? prev.filter(s => s !== slug) : [...prev, slug]
-    );
+  // Toggle a single category slug in/out of the filter selection.
+  // When a region slug is turned ON and the scope ceiling is still 'global',
+  // automatically widen it to 'national' so the player gets the region's local events.
+  const toggleCategory = (slug) => {
+    setAllowedCategories(prev => {
+      const isAdding = !prev.includes(slug);
+      if (isAdding && REGION_SLUGS.has(slug)) {
+        setAllowedScopes(prev => prev[0] === 'global' ? ['national'] : prev);
+      }
+      return isAdding ? [...prev, slug] : prev.filter(s => s !== slug);
+    });
+  };
 
   // Scope is a ceiling selector - clicking always sets exactly one level
   const setScope = (slug) => setAllowedScopes([slug]);
